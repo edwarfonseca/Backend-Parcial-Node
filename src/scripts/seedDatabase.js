@@ -1,10 +1,10 @@
 // src/scripts/seedDatabase.js
 const mongoose = require('mongoose');
 require('dotenv').config();
-const Paciente = require('../models/Paciente');
+const Persona = require('../models/Persona');
 
 // Datos de ejemplo para poblar la base de datos
-const pacientesEjemplo = [
+const PersonasEjemplo = [
     {
         nombre: "María García López",
         edad: 28,
@@ -163,21 +163,21 @@ async function seedDatabase() {
         console.log('🔗 Conectado a MongoDB');
 
         // Limpiar la colección existente
-        await Paciente.deleteMany({});
+        await Persona.deleteMany({});
         console.log('🗑️  Base de datos limpia');
 
         // Insertar datos de ejemplo
-        const pacientesCreados = await Paciente.insertMany(pacientesEjemplo);
-        console.log(`✅ Se crearon ${pacientesCreados.length} pacientes de ejemplo`);
+        const PersonasCreados = await Persona.insertMany(PersonasEjemplo);
+        console.log(`✅ Se crearon ${PersonasCreados.length} Personas de ejemplo`);
 
         // Mostrar algunos ejemplos
-        console.log('\n📋 Ejemplos de pacientes creados:');
-        pacientesCreados.slice(0, 3).forEach((paciente, index) => {
-            console.log(`${index + 1}. ${paciente.nombre} - ${paciente.profesion} (${paciente.experienciaLaboral} años exp.)`);
+        console.log('\n📋 Ejemplos de Personas creados:');
+        PersonasCreados.slice(0, 3).forEach((Persona, index) => {
+            console.log(`${index + 1}. ${Persona.nombre} - ${Persona.profesion} (${Persona.experienciaLaboral} años exp.)`);
         });
 
         console.log('\n🎉 Base de datos poblada exitosamente');
-        console.log(`📊 Total de pacientes: ${pacientesCreados.length}`);
+        console.log(`📊 Total de Personas: ${PersonasCreados.length}`);
 
     } catch (error) {
         console.error('❌ Error poblando la base de datos:', error);

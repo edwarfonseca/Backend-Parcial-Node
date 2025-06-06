@@ -6,7 +6,7 @@ require('dotenv').config();
 // Importar configuraciones
 const connectDB = require('./config/database');
 const typeDefs = require('./schemas/schema');
-const resolvers = require('./resolvers/pacienteResolvers');
+const resolvers = require('./resolvers/personaResolvers');
 
 async function startServer() {
     // Conectar a la base de datos

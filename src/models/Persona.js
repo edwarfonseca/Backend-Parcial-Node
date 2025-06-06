@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const pacienteSchema = new mongoose.Schema({
+const personaSchema = new mongoose.Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es requerido'],
@@ -85,17 +85,17 @@ const pacienteSchema = new mongoose.Schema({
 });
 
 // Índices
-pacienteSchema.index({ email: 1 }, { unique: true });
-pacienteSchema.index({ nombre: 1 });
-pacienteSchema.index({ profesion: 1 });
+Personaschema.index({ email: 1 }, { unique: true });
+Personaschema.index({ nombre: 1 });
+Personaschema.index({ profesion: 1 });
 
 // Método virtual para obtener la edad en años
-pacienteSchema.virtual('edadEnAnios').get(function() {
+Personaschema.virtual('edadEnAnios').get(function() {
     return `${this.edad} años`;
 });
 
 // Método para obtener un resumen del perfil
-pacienteSchema.methods.getResumenPerfil = function() {
+Personaschema.methods.getResumenPerfil = function() {
     return {
         nombre: this.nombre,
         profesion: this.profesion,
@@ -105,6 +105,6 @@ pacienteSchema.methods.getResumenPerfil = function() {
     };
 };
 
-const Paciente = mongoose.model('Paciente', pacienteSchema);
+const Persona = mongoose.model('Persona', Personaschema);
 
-module.exports = Paciente;
+module.exports = Persona;

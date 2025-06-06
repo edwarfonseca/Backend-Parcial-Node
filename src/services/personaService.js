@@ -1,88 +1,88 @@
-const Paciente = require('../models/Paciente');
+const Persona = require('../models/Persona');
 
-class PacienteService {
+class personaService {
     
-    // Obtener todos los pacientes
-    async getAllPacientes() {
+    // Obtener todos los Personas
+    async getAllPersonas() {
         try {
-            return await Paciente.find().sort({ createdAt: -1 });
+            return await Persona.find().sort({ createdAt: -1 });
         } catch (error) {
-            throw new Error(`Error al obtener pacientes: ${error.message}`);
+            throw new Error(`Error al obtener Personas: ${error.message}`);
         }
     }
 
-    // Obtener paciente por ID
-    async getPacienteById(id) {
+    // Obtener Persona por ID
+    async getPersonaById(id) {
         try {
-            const paciente = await Paciente.findById(id);
-            if (!paciente) {
-                throw new Error('Paciente no encontrado');
+            const Persona = await Persona.findById(id);
+            if (!Persona) {
+                throw new Error('Persona no encontrado');
             }
-            return paciente;
+            return Persona;
         } catch (error) {
-            throw new Error(`Error al obtener paciente: ${error.message}`);
+            throw new Error(`Error al obtener Persona: ${error.message}`);
         }
     }
 
-    // Obtener paciente por email
-    async getPacienteByEmail(email) {
+    // Obtener Persona por email
+    async getPersonaByEmail(email) {
         try {
-            return await Paciente.findOne({ email: email.toLowerCase() });
+            return await Persona.findOne({ email: email.toLowerCase() });
         } catch (error) {
-            throw new Error(`Error al buscar paciente por email: ${error.message}`);
+            throw new Error(`Error al buscar Persona por email: ${error.message}`);
         }
     }
 
-    // Crear nuevo paciente
-    async createPaciente(pacienteData) {
+    // Crear nuevo Persona
+    async createPersona(PersonaData) {
         try {
-            // Verificar si ya existe un paciente con ese email
-            const existingPaciente = await Paciente.findOne({ email: pacienteData.email.toLowerCase() });
-            if (existingPaciente) {
-                throw new Error(`Ya existe un paciente con el email: ${pacienteData.email}`);
+            // Verificar si ya existe un Persona con ese email
+            const existingPersona = await Persona.findOne({ email: PersonaData.email.toLowerCase() });
+            if (existingPersona) {
+                throw new Error(`Ya existe un Persona con el email: ${PersonaData.email}`);
             }
 
             // Convertir enums a formato de base de datos
-            const pacienteFormatted = {
-                ...pacienteData,
-                email: pacienteData.email.toLowerCase().trim(),
-                nombre: pacienteData.nombre.trim(),
-                telefono: pacienteData.telefono.trim(),
-                profesion: pacienteData.profesion.trim(),
-                nivelEducativo: this.convertirNivelEducativo(pacienteData.nivelEducativo),
-                habilidades: pacienteData.habilidades || [],
-                idiomas: pacienteData.idiomas ? pacienteData.idiomas.map(idioma => ({
+            const PersonaFormatted = {
+                ...PersonaData,
+                email: PersonaData.email.toLowerCase().trim(),
+                nombre: PersonaData.nombre.trim(),
+                telefono: PersonaData.telefono.trim(),
+                profesion: PersonaData.profesion.trim(),
+                nivelEducativo: this.convertirNivelEducativo(PersonaData.nivelEducativo),
+                habilidades: PersonaData.habilidades || [],
+                idiomas: PersonaData.idiomas ? PersonaData.idiomas.map(idioma => ({
                     idioma: idioma.idioma.trim(),
                     nivel: this.convertirNivelIdioma(idioma.nivel)
                 })) : []
             };
 
-            const paciente = new Paciente(pacienteFormatted);
-            return await paciente.save();
+            const Persona = new Persona(PersonaFormatted);
+            return await Persona.save();
         } catch (error) {
             if (error.code === 11000) {
-                throw new Error(`Ya existe un paciente con el email: ${pacienteData.email}`);
+                throw new Error(`Ya existe un Persona con el email: ${PersonaData.email}`);
             }
-            throw new Error(`Error al crear paciente: ${error.message}`);
+            throw new Error(`Error al crear Persona: ${error.message}`);
         }
     }
 
-    // Actualizar paciente
-    async updatePaciente(id, updateData) {
+    // Actualizar Persona
+    async updatePersona(id, updateData) {
         try {
-            const paciente = await Paciente.findById(id);
-            if (!paciente) {
-                throw new Error('Paciente no encontrado');
+            const Persona = await Persona.findById(id);
+            if (!Persona) {
+                throw new Error('Persona no encontrado');
             }
 
-            // Verificar si el nuevo email ya existe en otro paciente
-            if (updateData.email && paciente.email !== updateData.email.toLowerCase()) {
-                const existingPaciente = await Paciente.findOne({ 
+            // Verificar si el nuevo email ya existe en otro Persona
+            if (updateData.email && Persona.email !== updateData.email.toLowerCase()) {
+                const existingPersona = await Persona.findOne({ 
                     email: updateData.email.toLowerCase(),
                     _id: { $ne: id }
                 });
-                if (existingPaciente) {
-                    throw new Error(`Ya existe un paciente con el email: ${updateData.email}`);
+                if (existingPersona) {
+                    throw new Error(`Ya existe un Persona con el email: ${updateData.email}`);
                 }
             }
 
@@ -104,36 +104,36 @@ class PacienteService {
                 }));
             }
 
-            return await Paciente.findByIdAndUpdate(id, updateFormatted, { 
+            return await Persona.findByIdAndUpdate(id, updateFormatted, { 
                 new: true, 
                 runValidators: true 
             });
         } catch (error) {
-            throw new Error(`Error al actualizar paciente: ${error.message}`);
+            throw new Error(`Error al actualizar Persona: ${error.message}`);
         }
     }
 
-    // Eliminar paciente
-    async deletePaciente(id) {
+    // Eliminar Persona
+    async deletePersona(id) {
         try {
-            const result = await Paciente.findByIdAndDelete(id);
+            const result = await Persona.findByIdAndDelete(id);
             return !!result;
         } catch (error) {
-            throw new Error(`Error al eliminar paciente: ${error.message}`);
+            throw new Error(`Error al eliminar Persona: ${error.message}`);
         }
     }
 
-    // Contar pacientes
-    async countPacientes() {
+    // Contar Personas
+    async countPersonas() {
         try {
-            return await Paciente.countDocuments();
+            return await Persona.countDocuments();
         } catch (error) {
-            throw new Error(`Error al contar pacientes: ${error.message}`);
+            throw new Error(`Error al contar Personas: ${error.message}`);
         }
     }
 
-    // Buscar pacientes con filtros
-    async searchPacientes(filtros = {}, limite = 10, pagina = 1) {
+    // Buscar Personas con filtros
+    async searchPersonas(filtros = {}, limite = 10, pagina = 1) {
         try {
             const query = {};
             
@@ -167,42 +167,42 @@ class PacienteService {
 
             const skip = (pagina - 1) * limite;
             
-            return await Paciente.find(query)
+            return await Persona.find(query)
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limite);
         } catch (error) {
-            throw new Error(`Error al buscar pacientes: ${error.message}`);
+            throw new Error(`Error al buscar Personas: ${error.message}`);
         }
     }
 
-    // Obtener pacientes por profesión
-    async getPacientesByProfesion(profesion) {
+    // Obtener Personas por profesión
+    async getPersonasByProfesion(profesion) {
         try {
-            return await Paciente.find({ 
+            return await Persona.find({ 
                 profesion: { $regex: profesion, $options: 'i' }
             }).sort({ createdAt: -1 });
         } catch (error) {
-            throw new Error(`Error al obtener pacientes por profesión: ${error.message}`);
+            throw new Error(`Error al obtener Personas por profesión: ${error.message}`);
         }
     }
 
-    // Obtener pacientes por nivel educativo
-    async getPacientesByNivelEducativo(nivel) {
+    // Obtener Personas por nivel educativo
+    async getPersonasByNivelEducativo(nivel) {
         try {
-            return await Paciente.find({ 
+            return await Persona.find({ 
                 nivelEducativo: this.convertirNivelEducativo(nivel)
             }).sort({ createdAt: -1 });
         } catch (error) {
-            throw new Error(`Error al obtener pacientes por nivel educativo: ${error.message}`);
+            throw new Error(`Error al obtener Personas por nivel educativo: ${error.message}`);
         }
     }
 
     // Obtener estadísticas
-    async getEstadisticasPacientes() {
+    async getEstadisticasPersonas() {
         try {
-            const pacientes = await Paciente.find();
-            const total = pacientes.length;
+            const Personas = await Persona.find();
+            const total = Personas.length;
             
             if (total === 0) {
                 return {
@@ -215,12 +215,12 @@ class PacienteService {
                 };
             }
 
-            const promedioEdad = pacientes.reduce((sum, p) => sum + p.edad, 0) / total;
-            const promedioExperiencia = pacientes.reduce((sum, p) => sum + p.experienciaLaboral, 0) / total;
+            const promedioEdad = Personas.reduce((sum, p) => sum + p.edad, 0) / total;
+            const promedioExperiencia = Personas.reduce((sum, p) => sum + p.experienciaLaboral, 0) / total;
 
             // Profesión más común
             const profesiones = {};
-            pacientes.forEach(p => {
+            Personas.forEach(p => {
                 profesiones[p.profesion] = (profesiones[p.profesion] || 0) + 1;
             });
             const profesionMasComun = Object.keys(profesiones).reduce((a, b) => 
@@ -228,7 +228,7 @@ class PacienteService {
 
             // Nivel educativo más común
             const niveles = {};
-            pacientes.forEach(p => {
+            Personas.forEach(p => {
                 niveles[p.nivelEducativo] = (niveles[p.nivelEducativo] || 0) + 1;
             });
             const nivelEducativoMasComun = Object.keys(niveles).reduce((a, b) => 
@@ -236,7 +236,7 @@ class PacienteService {
 
             // Idioma más común
             const idiomas = {};
-            pacientes.forEach(p => {
+            Personas.forEach(p => {
                 p.idiomas.forEach(i => {
                     idiomas[i.idioma] = (idiomas[i.idioma] || 0) + 1;
                 });
@@ -257,39 +257,39 @@ class PacienteService {
         }
     }
 
-    // Obtener pacientes con experiencia mínima
-    async getPacientesConExperiencia(experienciaMinima) {
+    // Obtener Personas con experiencia mínima
+    async getPersonasConExperiencia(experienciaMinima) {
         try {
-            return await Paciente.find({ 
+            return await Persona.find({ 
                 experienciaLaboral: { $gte: experienciaMinima }
             }).sort({ experienciaLaboral: -1 });
         } catch (error) {
-            throw new Error(`Error al obtener pacientes con experiencia: ${error.message}`);
+            throw new Error(`Error al obtener Personas con experiencia: ${error.message}`);
         }
     }
 
-    // Obtener pacientes por idioma
-    async getPacientesPorIdioma(idioma) {
+    // Obtener Personas por idioma
+    async getPersonasPorIdioma(idioma) {
         try {
-            return await Paciente.find({
+            return await Persona.find({
                 'idiomas.idioma': { $regex: idioma, $options: 'i' }
             }).sort({ createdAt: -1 });
         } catch (error) {
-            throw new Error(`Error al obtener pacientes por idioma: ${error.message}`);
+            throw new Error(`Error al obtener Personas por idioma: ${error.message}`);
         }
     }
 
     // Agregar habilidad
     async addHabilidad(id, habilidad) {
         try {
-            const paciente = await Paciente.findById(id);
-            if (!paciente) {
-                throw new Error('Paciente no encontrado');
+            const Persona = await Persona.findById(id);
+            if (!Persona) {
+                throw new Error('Persona no encontrado');
             }
 
-            if (!paciente.habilidades.includes(habilidad)) {
-                paciente.habilidades.push(habilidad);
-                return await paciente.save();
+            if (!Persona.habilidades.includes(habilidad)) {
+                Persona.habilidades.push(habilidad);
+                return await Persona.save();
             }
             
             throw new Error('La habilidad ya existe');
@@ -301,13 +301,13 @@ class PacienteService {
     // Remover habilidad
     async removeHabilidad(id, habilidad) {
         try {
-            const paciente = await Paciente.findById(id);
-            if (!paciente) {
-                throw new Error('Paciente no encontrado');
+            const Persona = await Persona.findById(id);
+            if (!Persona) {
+                throw new Error('Persona no encontrado');
             }
 
-            paciente.habilidades = paciente.habilidades.filter(h => h !== habilidad);
-            return await paciente.save();
+            Persona.habilidades = Persona.habilidades.filter(h => h !== habilidad);
+            return await Persona.save();
         } catch (error) {
             throw new Error(`Error al remover habilidad: ${error.message}`);
         }
@@ -316,24 +316,24 @@ class PacienteService {
     // Agregar idioma
     async addIdioma(id, idiomaData) {
         try {
-            const paciente = await Paciente.findById(id);
-            if (!paciente) {
-                throw new Error('Paciente no encontrado');
+            const Persona = await Persona.findById(id);
+            if (!Persona) {
+                throw new Error('Persona no encontrado');
             }
 
-            const existeIdioma = paciente.idiomas.find(i => 
+            const existeIdioma = Persona.idiomas.find(i => 
                 i.idioma.toLowerCase() === idiomaData.idioma.toLowerCase());
             
             if (existeIdioma) {
                 throw new Error('El idioma ya existe');
             }
 
-            paciente.idiomas.push({
+            Persona.idiomas.push({
                 idioma: idiomaData.idioma.trim(),
                 nivel: this.convertirNivelIdioma(idiomaData.nivel)
             });
             
-            return await paciente.save();
+            return await Persona.save();
         } catch (error) {
             throw new Error(`Error al agregar idioma: ${error.message}`);
         }
@@ -342,15 +342,15 @@ class PacienteService {
     // Remover idioma
     async removeIdioma(id, idioma) {
         try {
-            const paciente = await Paciente.findById(id);
-            if (!paciente) {
-                throw new Error('Paciente no encontrado');
+            const Persona = await Persona.findById(id);
+            if (!Persona) {
+                throw new Error('Persona no encontrado');
             }
 
-            paciente.idiomas = paciente.idiomas.filter(i => 
+            Persona.idiomas = Persona.idiomas.filter(i => 
                 i.idioma.toLowerCase() !== idioma.toLowerCase());
             
-            return await paciente.save();
+            return await Persona.save();
         } catch (error) {
             throw new Error(`Error al remover idioma: ${error.message}`);
         }
@@ -359,12 +359,12 @@ class PacienteService {
     // Actualizar nivel de idioma
     async updateNivelIdioma(id, idioma, nuevoNivel) {
         try {
-            const paciente = await Paciente.findById(id);
-            if (!paciente) {
-                throw new Error('Paciente no encontrado');
+            const Persona = await Persona.findById(id);
+            if (!Persona) {
+                throw new Error('Persona no encontrado');
             }
 
-            const idiomaEncontrado = paciente.idiomas.find(i => 
+            const idiomaEncontrado = Persona.idiomas.find(i => 
                 i.idioma.toLowerCase() === idioma.toLowerCase());
             
             if (!idiomaEncontrado) {
@@ -372,14 +372,14 @@ class PacienteService {
             }
 
             idiomaEncontrado.nivel = this.convertirNivelIdioma(nuevoNivel);
-            return await paciente.save();
+            return await Persona.save();
         } catch (error) {
             throw new Error(`Error al actualizar nivel de idioma: ${error.message}`);
         }
     }
     
-    async getPacientesByNivelEducativo(nivel) {
-        return await Paciente.find({ 
+    async getPersonasByNivelEducativo(nivel) {
+        return await Persona.find({ 
             nivelEducativo: this.convertirNivelEducativo(nivel)
     });
 }
@@ -410,4 +410,4 @@ class PacienteService {
     }
 }
 
-module.exports = new PacienteService();
+module.exports = new personaService();

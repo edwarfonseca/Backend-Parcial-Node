@@ -1,6 +1,6 @@
 # GraphQL API con Node.js y MongoDB
 
-API GraphQL para gestión de pacientes utilizando Node.js, Apollo Server y MongoDB.
+API GraphQL para gestión de Personas utilizando Node.js, Apollo Server y MongoDB.
 
 ## Instalación
 

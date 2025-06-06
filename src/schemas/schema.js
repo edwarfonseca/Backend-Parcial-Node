@@ -33,8 +33,8 @@ const typeDefs = gql`
         nivel: NivelIdioma!
     }
 
-    # Tipo principal Paciente
-    type Paciente {
+    # Tipo principal Persona
+    type Persona {
         id: ID!
         nombre: String!             # Este es el campo correcto (no "name")
         edad: Int!
@@ -49,8 +49,8 @@ const typeDefs = gql`
         updatedAt: String
     }
 
-    # Input para crear paciente
-    input PacienteInput {
+    # Input para crear Persona
+    input PersonaInput {
         nombre: String!
         edad: Int!
         telefono: String!
@@ -62,8 +62,8 @@ const typeDefs = gql`
         idiomas: [IdiomaInput!]
     }
 
-    # Input para actualizar paciente (todos los campos opcionales excepto al menos uno)
-    input PacienteUpdateInput {
+    # Input para actualizar Persona (todos los campos opcionales excepto al menos uno)
+    input PersonaUpdateInput {
         nombre: String
         edad: Int
         telefono: String
@@ -76,7 +76,7 @@ const typeDefs = gql`
     }
 
     # Tipo para filtros de búsqueda
-    input PacienteFilterInput {
+    input PersonaFilterInput {
         nombre: String
         profesion: String
         nivelEducativo: NivelEducativo
@@ -89,7 +89,7 @@ const typeDefs = gql`
     }
 
     # Tipo para estadísticas
-    type EstadisticasPacientes {
+    type EstadisticasPersonas {
         total: Int!
         promedioEdad: Float
         promedioExperiencia: Float
@@ -99,64 +99,64 @@ const typeDefs = gql`
     }
 
     type Query {
-        # Obtener todos los pacientes
-        getPacientes: [Paciente!]!
+        # Obtener todos los Personas
+        getPersonas: [Persona!]!
         
-        # Obtener paciente por ID
-        getPacienteById(id: ID!): Paciente
+        # Obtener Persona por ID
+        getPersonaById(id: ID!): Persona
 
-        # Obtener paciente por nivel educativo
-        getPacienteByNivelEducativo(nivel: NivelEducativo!): [Paciente!]!
+        # Obtener Persona por nivel educativo
+        getPersonaByNivelEducativo(nivel: NivelEducativo!): [Persona!]!
 
-        # Obtener paciente por email
-        getPacienteByEmail(email: String!): Paciente
+        # Obtener Persona por email
+        getPersonaByEmail(email: String!): Persona
         
-        # Buscar pacientes con filtros
-        searchPacientes(filtros: PacienteFilterInput, limite: Int = 10, pagina: Int = 1): [Paciente!]!
+        # Buscar Personas con filtros
+        searchPersonas(filtros: PersonaFilterInput, limite: Int = 10, pagina: Int = 1): [Persona!]!
         
-        # Contar pacientes
-        countPacientes: Int!
+        # Contar Personas
+        countPersonas: Int!
         
-        # Obtener pacientes por profesión
-        getPacientesByProfesion(profesion: String!): [Paciente!]!
+        # Obtener Personas por profesión
+        getPersonasByProfesion(profesion: String!): [Persona!]!
         
-        # Obtener pacientes por nivel educativo
-        getPacientesByNivelEducativo(nivel: NivelEducativo!): [Paciente!]!
+        # Obtener Personas por nivel educativo
+        getPersonasByNivelEducativo(nivel: NivelEducativo!): [Persona!]!
         
         # Obtener estadísticas generales
-        getEstadisticasPacientes: EstadisticasPacientes!
+        getEstadisticasPersonas: EstadisticasPersonas!
         
-        # Obtener pacientes con experiencia mínima
-        getPacientesConExperiencia(experienciaMinima: Int!): [Paciente!]!
+        # Obtener Personas con experiencia mínima
+        getPersonasConExperiencia(experienciaMinima: Int!): [Persona!]!
         
-        # Obtener pacientes que hablan un idioma específico
-        getPacientesPorIdioma(idioma: String!): [Paciente!]!
+        # Obtener Personas que hablan un idioma específico
+        getPersonasPorIdioma(idioma: String!): [Persona!]!
     }
 
     type Mutation {
-        # Crear nuevo paciente
-        createPaciente(input: PacienteInput!): Paciente!
+        # Crear nuevo Persona
+        createPersona(input: PersonaInput!): Persona!
         
-        # Actualizar paciente existente
-        updatePaciente(id: ID!, input: PacienteUpdateInput!): Paciente!
+        # Actualizar Persona existente
+        updatePersona(id: ID!, input: PersonaUpdateInput!): Persona!
         
-        # Eliminar paciente
-        deletePaciente(id: ID!): Boolean!
+        # Eliminar Persona
+        deletePersona(id: ID!): Boolean!
         
-        # Agregar habilidad a un paciente
-        addHabilidad(id: ID!, habilidad: String!): Paciente!
+        # Agregar habilidad a un Persona
+        addHabilidad(id: ID!, habilidad: String!): Persona!
         
-        # Remover habilidad de un paciente
-        removeHabilidad(id: ID!, habilidad: String!): Paciente!
+        # Remover habilidad de un Persona
+        removeHabilidad(id: ID!, habilidad: String!): Persona!
         
-        # Agregar idioma a un paciente
-        addIdioma(id: ID!, idioma: IdiomaInput!): Paciente!
+        # Agregar idioma a un Persona
+        addIdioma(id: ID!, idioma: IdiomaInput!): Persona!
         
-        # Remover idioma de un paciente
-        removeIdioma(id: ID!, idioma: String!): Paciente!
+        # Remover idioma de un Persona
+        removeIdioma(id: ID!, idioma: String!): Persona!
         
         # Actualizar nivel de idioma
-        updateNivelIdioma(id: ID!, idioma: String!, nuevoNivel: NivelIdioma!): Paciente!
+        updateNivelIdioma(id: ID!, idioma: String!, nuevoNivel: NivelIdioma!): Persona!
     }
 `;
 
