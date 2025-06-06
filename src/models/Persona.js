@@ -1,3 +1,4 @@
+// src/models/Persona.js
 const mongoose = require('mongoose');
 
 const personaSchema = new mongoose.Schema({
@@ -37,74 +38,15 @@ const personaSchema = new mongoose.Schema({
             },
             message: 'El formato del email no es válido'
         }
-    },
-    nivelEducativo: {
-        type: String,
-        required: [true, 'El nivel educativo es requerido'],
-        enum: {
-            values: ['Primaria', 'Secundaria', 'Técnico', 'Tecnológico', 'Universitario', 'Posgrado', 'Maestría', 'Doctorado'],
-            message: 'El nivel educativo debe ser uno de los valores permitidos'
-        }
-    },
-    profesion: {
-        type: String,
-        required: [true, 'La profesión es requerida'],
-        trim: true,
-        minlength: [2, 'La profesión debe tener al menos 2 caracteres'],
-        maxlength: [100, 'La profesión no puede exceder 100 caracteres']
-    },
-    experienciaLaboral: {
-        type: Number,
-        required: [true, 'La experiencia laboral es requerida'],
-        min: [0, 'La experiencia laboral no puede ser negativa'],
-        max: [70, 'La experiencia laboral no puede ser mayor a 70 años']
-    },
-    habilidades: [{
-        type: String,
-        trim: true,
-        maxlength: [50, 'Cada habilidad no puede exceder 50 caracteres']
-    }],
-    idiomas: [{
-        idioma: {
-            type: String,
-            required: [true, 'El nombre del idioma es requerido'],
-            trim: true,
-            maxlength: [30, 'El nombre del idioma no puede exceder 30 caracteres']
-        },
-        nivel: {
-            type: String,
-            required: [true, 'El nivel del idioma es requerido'],
-            enum: {
-                values: ['Básico', 'Intermedio', 'Avanzado', 'Nativo'],
-                message: 'El nivel debe ser: Básico, Intermedio, Avanzado o Nativo'
-            }
-        }
-    }]
+    }
 }, {
-    timestamps: true // Agrega createdAt y updatedAt automáticamente
+    timestamps: true
 });
 
-// Índices
-Personaschema.index({ email: 1 }, { unique: true });
-Personaschema.index({ nombre: 1 });
-Personaschema.index({ profesion: 1 });
+// Índices - AQUÍ ESTÁ LA CORRECCIÓN
+personaSchema.index({ email: 1 }, { unique: true });
+personaSchema.index({ nombre: 1 });
 
-// Método virtual para obtener la edad en años
-Personaschema.virtual('edadEnAnios').get(function() {
-    return `${this.edad} años`;
-});
-
-// Método para obtener un resumen del perfil
-Personaschema.methods.getResumenPerfil = function() {
-    return {
-        nombre: this.nombre,
-        profesion: this.profesion,
-        experiencia: `${this.experienciaLaboral} años`,
-        educacion: this.nivelEducativo,
-        contacto: this.email
-    };
-};
-
-const Persona = mongoose.model('Persona', Personaschema);
+const Persona = mongoose.model('Persona', personaSchema);
 
 module.exports = Persona;
